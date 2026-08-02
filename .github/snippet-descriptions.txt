@@ -1,0 +1,30 @@
+getBalance|Read a wallet's ETH balance on Base
+getBlockNumber|Get the latest block number on Base
+createPublicClient|Set up a viem public client for Base
+createWalletClient|Set up a viem wallet client for signing
+estimateGas|Estimate gas cost for a transaction
+sendTransaction|Send a simple ETH transfer on Base
+getTransactionReceipt|Fetch a transaction receipt by hash
+waitForTransactionReceipt|Wait until a transaction confirms
+readContract|Read data from a smart contract
+writeContract|Send a state-changing contract call
+getGasPrice|Fetch the current gas price
+getChainId|Get the connected chain ID
+signMessage|Sign a plain text message with a wallet
+verifyMessage|Verify a signed message's signer
+getLogs|Fetch event logs from a contract
+watchContractEvent|Subscribe to live contract events
+getBlock|Fetch full block data by number
+getTransactionCount|Get an address's transaction nonce
+simulateContract|Dry-run a contract call before sending
+multicall|Batch multiple contract reads in one call
+getStorageAt|Read raw contract storage slot
+getBytecode|Fetch a contract's deployed bytecode
+getEnsAddress|Resolve an ENS or Basename to an address
+approveERC20|Approve an ERC-20 spender allowance
+transferERC20|Transfer ERC-20 tokens
+getERC20Balance|Read an ERC-20 token balance
+estimateFeesPerGas|Estimate EIP-1559 gas fees
+watchBlocks|Subscribe to new blocks on Base
+deployContract|Deploy a contract using viem
+batchRequests|Batch multiple RPC requests together
