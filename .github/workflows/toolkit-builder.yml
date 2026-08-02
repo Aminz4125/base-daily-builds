@@ -1,0 +1,80 @@
+name: Base Daily Builds
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+    - cron: '0 15 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Stop after 30-day window
+        run: |
+          END_DATE="2026-09-01"
+          TODAY=$(date -u +%Y-%m-%d)
+          if [[ "$TODAY" > "$END_DATE" ]]; then
+            echo "30-day window is over. Skipping."
+            echo "SKIP=true" >> "$GITHUB_ENV"
+          else
+            echo "SKIP=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Random delay
+        if: github.event_name == 'schedule' && env.SKIP == 'false'
+        run: |
+          DELAY=$(( RANDOM % 5400 ))
+          echo "Sleeping for $DELAY seconds"
+          sleep "$DELAY"
+
+      - name: Configure git
+        if: env.SKIP == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Advance the toolkit by one step
+        if: env.SKIP == 'false'
+        run: |
+          INDEX_FILE=".github/toolkit_index.txt"
+          if [ -f "$INDEX_FILE" ]; then
+            INDEX=$(cat "$INDEX_FILE")
+          else
+            INDEX=0
+          fi
+
+          TOTAL=$(ls queue 2>/dev/null | wc -l)
+          SNIPPET_NUM=$(( (INDEX / 2) + 1 ))
+
+          if [ "$SNIPPET_NUM" -gt "$TOTAL" ]; then
+            echo "All snippets already added. Nothing to do."
+            exit 0
+          fi
+
+          FILE=$(ls queue | sed -n "${SNIPPET_NUM}p")
+          NAME=$(basename "$FILE" .js | sed -E 's/^[0-9]+-//')
+          DESC=$(sed -n "${SNIPPET_NUM}p" .github/snippet-descriptions.txt | cut -d'|' -f2)
+
+          if [ $(( INDEX % 2 )) -eq 0 ]; then
+            mkdir -p snippets
+            git mv "queue/$FILE" "snippets/$FILE"
+            echo $((INDEX + 1)) > "$INDEX_FILE"
+            git add "$INDEX_FILE"
+            git commit -m "Add $NAME snippet"
+          else
+            echo "- \`snippets/$FILE\` — $DESC" >> README.md
+            echo $((INDEX + 1)) > "$INDEX_FILE"
+            git add README.md "$INDEX_FILE"
+            git commit -m "docs: index $NAME snippet in README"
+          fi
+
+      - name: Push changes
+        if: env.SKIP == 'false'
+        run: git push
