@@ -5,3 +5,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 ## Snippets
 
 - `snippets/01-getBalance.js` — Read a wallet's ETH balance on Base
+- `snippets/01-getBalance.js` — Read a wallet's ETH balance on Base
