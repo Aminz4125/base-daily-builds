@@ -50,15 +50,21 @@ jobs:
             INDEX=0
           fi
 
-          TOTAL=$(ls queue 2>/dev/null | wc -l)
+          TOTAL=$(find queue -maxdepth 1 -type f -name '*.js' 2>/dev/null | wc -l)
           SNIPPET_NUM=$(( (INDEX / 2) + 1 ))
 
-          if [ "$SNIPPET_NUM" -gt "$TOTAL" ]; then
+          if [ "$SNIPPET_NUM" -gt "$TOTAL" ] || [ "$TOTAL" -eq 0 ]; then
             echo "All snippets already added. Nothing to do."
             exit 0
           fi
 
-          FILE=$(ls queue | sed -n "${SNIPPET_NUM}p")
+          FILE=$(find queue -maxdepth 1 -type f -name '*.js' | sort | sed -n "${SNIPPET_NUM}p" | xargs -r basename)
+
+          if [ -z "$FILE" ]; then
+            echo "Could not resolve next file. Aborting safely."
+            exit 0
+          fi
+
           NAME=$(basename "$FILE" .js | sed -E 's/^[0-9]+-//')
           DESC=$(sed -n "${SNIPPET_NUM}p" .github/snippet-descriptions.txt | cut -d'|' -f2)
 
