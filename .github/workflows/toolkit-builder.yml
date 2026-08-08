@@ -40,47 +40,49 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Advance the toolkit by one step
+      - name: Advance the toolkit by one real step
         if: env.SKIP == 'false'
         run: |
-          INDEX_FILE=".github/toolkit_index.txt"
-          if [ -f "$INDEX_FILE" ]; then
-            INDEX=$(cat "$INDEX_FILE")
-          else
-            INDEX=0
-          fi
+          mkdir -p snippets queue
 
-          TOTAL=$(find queue -maxdepth 1 -type f -name '*.js' 2>/dev/null | wc -l)
-          SNIPPET_NUM=$(( (INDEX / 2) + 1 ))
+          # Helper: get description for a given NN-name.js filename
+          get_desc () {
+            local file="$1"
+            local num
+            num=$(basename "$file" | sed -E 's/^0*([0-9]+)-.*/\1/')
+            sed -n "${num}p" .github/snippet-descriptions.txt | cut -d'|' -f2
+          }
 
-          if [ "$SNIPPET_NUM" -gt "$TOTAL" ] || [ "$TOTAL" -eq 0 ]; then
-            echo "All snippets already added. Nothing to do."
-            exit 0
-          fi
+          # Step 1: any snippet already added but not yet documented in README?
+          UNDOCUMENTED=""
+          for f in snippets/*.js; do
+            [ -e "$f" ] || continue
+            base_f=$(basename "$f")
+            if ! grep -qF "snippets/$base_f" README.md; then
+              UNDOCUMENTED="$f"
+              break
+            fi
+          done
 
-          FILE=$(find queue -maxdepth 1 -type f -name '*.js' | sort | sed -n "${SNIPPET_NUM}p" | xargs -r basename)
-
-          if [ -z "$FILE" ]; then
-            echo "Could not resolve next file. Aborting safely."
-            exit 0
-          fi
-
-          NAME=$(basename "$FILE" .js | sed -E 's/^[0-9]+-//')
-          DESC=$(sed -n "${SNIPPET_NUM}p" .github/snippet-descriptions.txt | cut -d'|' -f2)
-
-          if [ $(( INDEX % 2 )) -eq 0 ]; then
-            mkdir -p snippets
-            git mv "queue/$FILE" "snippets/$FILE"
-            echo $((INDEX + 1)) > "$INDEX_FILE"
-            git add "$INDEX_FILE"
-            git commit -m "Add $NAME snippet"
-          else
-            echo "- \`snippets/$FILE\` — $DESC" >> README.md
-            echo $((INDEX + 1)) > "$INDEX_FILE"
-            git add README.md "$INDEX_FILE"
+          if [ -n "$UNDOCUMENTED" ]; then
+            NAME=$(basename "$UNDOCUMENTED" .js | sed -E 's/^[0-9]+-//')
+            DESC=$(get_desc "$UNDOCUMENTED")
+            echo "- \`snippets/$(basename "$UNDOCUMENTED")\` — $DESC" >> README.md
+            git add README.md
             git commit -m "docs: index $NAME snippet in README"
+            git push
+            exit 0
           fi
 
-      - name: Push changes
-        if: env.SKIP == 'false'
-        run: git push
+          # Step 2: otherwise, move the next queued snippet (alphabetically first) into snippets/
+          NEXT=$(find queue -maxdepth 1 -type f -name '*.js' 2>/dev/null | sort | head -n 1)
+          if [ -z "$NEXT" ]; then
+            echo "Nothing left in the queue. Toolkit is complete."
+            exit 0
+          fi
+
+          FILE=$(basename "$NEXT")
+          NAME=$(basename "$FILE" .js | sed -E 's/^[0-9]+-//')
+          git mv "$NEXT" "snippets/$FILE"
+          git commit -m "Add $NAME snippet"
+          git push
