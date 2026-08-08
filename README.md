@@ -9,3 +9,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/05-estimateGas.js` — Get the latest block number on Base
 - `snippets/07-getTransactionReceipt.js` — Set up a viem public client for Base
 - `snippets/09-readContract.js` — Set up a viem wallet client for signing
+- `snippets/11-getGasPrice.js` — Estimate gas cost for a transaction
