@@ -12,3 +12,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/10-writeContract.js` — Send a state-changing contract call
 - `snippets/03-createPublicClient.js` — Set up a viem public client for Base
 - `snippets/03-createPublicClient.js` — Set up a viem public client for Base
+- `snippets/05-estimateGas.js` — Estimate gas cost for a transaction
