@@ -10,3 +10,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/06-sendTransaction.js` — Send a simple ETH transfer on Base
 - `snippets/08-waitForTransactionReceipt.js` — Wait until a transaction confirms
 - `snippets/10-writeContract.js` — Send a state-changing contract call
+- `snippets/03-createPublicClient.js` — Set up a viem public client for Base
