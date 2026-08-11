@@ -14,3 +14,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/08-waitForTransactionReceipt.js` — Wait until a transaction confirms
 - `snippets/10-writeContract.js` — Send a state-changing contract call
 - `snippets/09-readContract.js` — Read data from a smart contract
+- `snippets/11-getGasPrice.js` — Fetch the current gas price
