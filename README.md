@@ -16,3 +16,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/09-readContract.js` — Read data from a smart contract
 - `snippets/11-getGasPrice.js` — Fetch the current gas price
 - `snippets/12-getChainId.js` — Get the connected chain ID
+- `snippets/13-signMessage.js` — Sign a plain text message with a wallet
