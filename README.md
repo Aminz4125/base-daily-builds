@@ -18,3 +18,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/12-getChainId.js` — Get the connected chain ID
 - `snippets/13-signMessage.js` — Sign a plain text message with a wallet
 - `snippets/14-verifyMessage.js` — Verify a signed message's signer
+- `snippets/15-getLogs.js` — Fetch event logs from a contract
