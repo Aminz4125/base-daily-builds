@@ -20,3 +20,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/14-verifyMessage.js` — Verify a signed message's signer
 - `snippets/15-getLogs.js` — Fetch event logs from a contract
 - `snippets/16-watchContractEvent.js` — Subscribe to live contract events
+- `snippets/17-getBlock.js` — Fetch full block data by number
