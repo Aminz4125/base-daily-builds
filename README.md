@@ -25,3 +25,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/18-getTransactionCount.js` — Get an address's transaction nonce
 - `snippets/20-multicall.js` — Batch multiple contract reads in one call
 - `snippets/21-getStorageAt.js` — Read raw contract storage slot
+- `snippets/22-getBytecode.js` — Fetch a contract's deployed bytecode
