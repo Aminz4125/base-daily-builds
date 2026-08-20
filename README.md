@@ -27,3 +27,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/21-getStorageAt.js` — Read raw contract storage slot
 - `snippets/22-getBytecode.js` — Fetch a contract's deployed bytecode
 - `snippets/23-getEnsAddress.js` — Resolve an ENS or Basename to an address
+- `snippets/24-approveERC20.js` — Approve an ERC-20 spender allowance
