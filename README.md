@@ -29,3 +29,4 @@ A small, growing collection of practical [viem](https://viem.sh) snippets for bu
 - `snippets/23-getEnsAddress.js` — Resolve an ENS or Basename to an address
 - `snippets/24-approveERC20.js` — Approve an ERC-20 spender allowance
 - `snippets/25-transferERC20.js` — Transfer ERC-20 tokens
+- `snippets/26-getERC20Balance.js` — Read an ERC-20 token balance
